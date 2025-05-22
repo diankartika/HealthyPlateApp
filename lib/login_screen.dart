@@ -49,9 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
             // Blur effect layer
                   Positioned.fill(
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                      filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                       child: Container(
-                        color: Colors.black.withOpacity(0.2), // Optional: tint color
+                        color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5), // Optional: tint color
                       ),
                     ),
                   ),
