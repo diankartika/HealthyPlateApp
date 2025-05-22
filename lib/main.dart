@@ -31,23 +31,15 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-        Image.network(
-        'https://i.imgur.com/6oMAr7d.png',
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(color: const Color(0xFF282828));
-              },
-            ),
+          Image.asset('assets/images/bg_1.png', fit: BoxFit.cover),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
                   const Spacer(),
-                  
-                  
-                 
-                  const SizedBox(height:20),
+
+                  const SizedBox(height: 700),
                   SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -55,7 +47,9 @@ class WelcomeScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -90,10 +84,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       child: const Text(
                         'Create an Account',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),
