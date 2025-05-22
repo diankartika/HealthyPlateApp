@@ -31,48 +31,23 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background container
-          Container(
-            color: const Color(0xFF282828),
-          ),
-          
+        Image.network(
+        'https://i.imgur.com/6oMAr7d.png',
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(color: const Color(0xFF282828));
+              },
+            ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
                   const Spacer(),
-                  Image.asset(
-                    'assets/images/welcome_logo.png', 
-                    height: 120,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.eco,
-                        size: 120,
-                        color: Color(0xFF9ABD40),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 40),
-                  const Text(
-                    "Let's Get Started!",
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF9ABD40),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Discover healthy and delicious food options for your daily meals",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 64),
+                  
+                  
+                 
+                  const SizedBox(height:20),
                   SizedBox(
                     width: double.infinity,
                     height: 56,

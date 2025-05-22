@@ -1,5 +1,7 @@
 // login_screen.dart - FIXED VERSION
 import 'package:flutter/material.dart';
+import 'dart:ui';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -35,12 +37,25 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             // Background image - positioned at the very back
             Positioned.fill(
-              child: Image.network(
-                'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/MobApps_Cihuy-07wdZwixCeApgJu7gwda8Osjj4IPUy.png',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(color: const Color(0xFF282828));
-                },
+  child: Stack(
+    children: [
+      Image.network(
+        'https://i.imgur.com/ieAlfO3.png',
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(color: const Color(0xFF282828));
+              },
+            ),
+            // Blur effect layer
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.2), // Optional: tint color
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             
@@ -54,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 24.0, top: 16.0),
+                        padding: const EdgeInsets.only(left: 24.0, top: 20.0),
                         // Back button
                         child: Container(
                           width: 48,
@@ -82,23 +97,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Push content down
-                          SizedBox(height: screenHeight * 0.15),
+                          SizedBox(height: screenHeight * 0.30),
                           
                           // Welcome text
-                          const Text(
+                          const Center(
+                            child: Text(
                             'Welcome Back!',
                             style: TextStyle(
                               color: Color(0xFF9ABD40),
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
+                          const Center(
+                            child: Text(
                             'Please Log in to Your Account',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 32),
