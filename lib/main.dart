@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart'; // Import halaman login
+import 'register_screen.dart'; // Import halaman register
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +25,37 @@ class MyApp extends StatelessWidget {
 }
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset('assets/images/bg_1.png', fit: BoxFit.cover),
+          // Background image
+          Positioned.fill(
+            child: Image.asset('assets/images/bg_1.png', fit: BoxFit.cover),
+          ),
+
+          // Foreground content
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Spacer(),
+                  const Spacer(), // Push buttons ke bawah
+                  // Optional: Welcome Text (bisa kamu tambahkan di sini)
 
-                  const SizedBox(height: 20),
+                  // Login button
                   SizedBox(
-                    width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                            builder: (_) => const LoginScreen(),
                           ),
                         );
                       },
@@ -68,13 +75,20 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 16),
+
+                  // Create Account button
                   SizedBox(
-                    width: double.infinity,
                     height: 56,
                     child: OutlinedButton(
                       onPressed: () {
-                        // Tambahkan navigasi ke halaman SignUp jika ada
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterScreen(),
+                          ),
+                        );
                       },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Color(0xFFD2D2D2)),
@@ -88,7 +102,8 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Spacer(),
+
+                  const SizedBox(height: 32), // Jarak dari bawah layar
                 ],
               ),
             ),
