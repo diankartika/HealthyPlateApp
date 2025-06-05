@@ -1,6 +1,7 @@
 // login_screen.dart - FIXED VERSION
 import 'package:flutter/material.dart';
 import 'register_screen.dart'; // Tambahkan ini di bagian atas
+import 'menu_1.dart';
 import 'dart:ui';
 
 class LoginScreen extends StatefulWidget {
@@ -263,6 +264,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // Handle login
                                 print('Login button pressed');
                                 // Add your login logic here
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const Menu1(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF9ABD40),
