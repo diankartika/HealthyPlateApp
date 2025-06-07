@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -32,22 +32,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
-          Positioned.fill(child: Image.asset('assets/images/bg_2.png')),
+          // Background layer (resolved merge conflict)
           Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-              child: Container(
-                color: const Color.fromARGB(
-                  255,
-                  0,
-                  0,
-                  0,
-                ).withOpacity(0.3), // Optional: tint color
-              ),
+            child: Stack(
+              children: [
+                Image.asset('assets/images/bg_2.png', fit: BoxFit.cover),
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                    child: Container(color: Colors.black.withOpacity(0.2)),
+                  ),
+                ),
+              ],
             ),
           ),
-          // Content
+
+          // Foreground content
           Positioned.fill(
             child: Column(
               children: [
@@ -75,6 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
+
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -97,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 32),
 
-                        // Full Name
+                        // Name
                         _buildInputField(
                           controller: _nameController,
                           hintText: 'Full Name',
@@ -132,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Remember me and Forgot Password
+                        // Remember Me + Forgot Password
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -178,10 +179,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             TextButton(
                               onPressed: () {},
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(10, 10),
-                              ),
                               child: const Text(
                                 'Forgot Password?',
                                 style: TextStyle(color: Colors.white),
@@ -197,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 56,
                           child: ElevatedButton(
                             onPressed: () {
-                              print('Register pressed');
+                              debugPrint('Register pressed');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF9ABD40),
@@ -244,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const Spacer(),
 
-                        // Sign In Link
+                        // Already have an account?
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -253,9 +250,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(color: Colors.white),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context); // back to login
+                              },
                               child: const Text(
-                                'Sign Up',
+                                'Sign In',
                                 style: TextStyle(color: Color(0xFF9ABD40)),
                               ),
                             ),

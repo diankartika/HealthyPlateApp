@@ -1,7 +1,9 @@
 // login_screen.dart - FIXED VERSION
 import 'package:flutter/material.dart';
-import 'register_screen.dart'; // Tambahkan ini di bagian atas
+import 'register_screen.dart';
+import 'menu_1.dart';
 import 'dart:ui';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,10 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Blur effect layer
                   Positioned.fill(
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                       child: Container(
                         color: Colors.black.withOpacity(
-                          0.2,
+                          0.5,
                         ), // Optional: tint color
                       ),
                     ),
@@ -263,6 +265,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // Handle login
                                 print('Login button pressed');
                                 // Add your login logic here
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const HomeScreen(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF9ABD40),
