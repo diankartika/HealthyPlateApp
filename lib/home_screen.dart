@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'menu_1.dart';
+import 'components/navbarbutton.dart'; // pastikan path ini benar
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentTab = 0;
+
   static const List<Map<String, dynamic>> foodList = [
     {
       'image': 'assets/images/food1.png',
@@ -27,283 +36,200 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromARGB(255, 44, 44, 44),
-                      Color(0xFF1A1A1A),
-                    ],
-                  ),
+      backgroundColor: const Color(0xFF1A1A1A),
+      body: IndexedStack(
+        index: currentTab,
+        children: [
+          _buildHomeContent(context),
+          const Center(
+            child: Text(
+              "Customize Page",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          const Center(
+            child: Text("Account Page", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: currentTab,
+        onTabSelected: (index) {
+          setState(() {
+            currentTab = index;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildHomeContent(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 24),
+              const Text(
+                "Today's\nrecommendation",
+                style: TextStyle(
+                  color: Color(0xFF9ABD40),
+                  fontSize: 38,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Title Section
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 60.0,
-                        right: 80,
-                        left: 24,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Maybe something light for today?',
+                style: TextStyle(color: Colors.white70, fontSize: 16),
+              ),
+              const SizedBox(height: 32),
+
+              // Food List
+              SizedBox(
+                height: 460,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: foodList.length,
+                  itemBuilder: (context, index) {
+                    final food = foodList[index];
+                    return Container(
+                      width: 250,
+                      margin: const EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 24, 24, 24),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "Today's\nrecomendation",
-                            style: TextStyle(
-                              color: Color(0xFF9ABD40),
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold,
-                              height: 1,
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                            child: Image.asset(
+                              food['image']!,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Maybe something light for today?',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Food List Section
-                    SizedBox(
-                      height: 460, //Atur tinggi sesuai kebutuhan
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 8,
-                        ),
-                        itemCount: foodList.length,
-                        itemBuilder: (context, index) {
-                          final food = foodList[index];
-                          return Container(
-                            width: 250,
-                            margin: const EdgeInsets.only(right: 16),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 24, 24, 24),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                  child: Image.asset(
-                                    food['image'],
-                                    height: 200,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
+                                Text(
+                                  food['name']!,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 40.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .center, // Center vertically
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .center, // Center horizontally
-                                    children: [
-                                      Text(
-                                        food['name'],
-                                        textAlign:
-                                            TextAlign
-                                                .center, // Center text alignment
-                                        style: const TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  food['price']!,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Color(0xFF9ABD40),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    food['calories']!,
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF9ABD40),
+                                    foregroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 7,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const Menu1(),
                                       ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        food['price'],
-                                        textAlign:
-                                            TextAlign
-                                                .center, // Center text alignment
-                                        style: const TextStyle(
-                                          color: Color(0xFF9ABD40),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 6,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          food['calories'],
-                                          textAlign:
-                                              TextAlign
-                                                  .center, // Center text alignment
-                                          style: const TextStyle(
-                                            color: Colors.white70,
-                                          ),
-                                        ),
-                                      ),
-
-                                      // Button I want
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom:
-                                              MediaQuery.of(
-                                                context,
-                                              ).padding.bottom +
-                                              40,
-                                          left: 10,
-                                          right: 13,
-                                          top: 10,
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF9ABD40),
-                                            borderRadius: BorderRadius.circular(
-                                              50,
-                                            ),
-                                          ),
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              shadowColor: Colors.transparent,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 20.0,
-                                                    vertical: 7.0,
-                                                  ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => const Menu1(),
-                                                ),
-                                              );
-                                            },
-                                            child: const Text(
-                                              'I Want This One',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  36,
-                                                  36,
-                                                  36,
-                                                ),
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    );
+                                  },
+                                  child: const Text(
+                                    'I Want This One',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // Button Section
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom + 40,
-                        left: 24,
-                        right: 24,
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF9ABD40),
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 38, 38, 38),
-                            width: 5.0,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF9ABD40).withOpacity(0.6),
-                              blurRadius: 20,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 32.0,
-                              vertical: 16.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const Menu1()),
-                            );
-                          },
-                          child: const Text(
-                            'Customize My\nOwn Menu',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Color.fromARGB(255, 57, 57, 57),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-            ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF282828),
-        selectedItemColor: const Color(0xFF9ABD40),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant),
-            label: 'Customize',
+
+              const SizedBox(height: 32),
+
+              // Customize My Own Menu Button
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF9ABD40),
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32.0,
+                      vertical: 16.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const Menu1()),
+                    );
+                  },
+                  child: const Text(
+                    'Customize My\nOwn Menu',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 100,
+              ), // ✅ beri jarak agar tidak nabrak navbar
+            ],
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+        ),
       ),
     );
   }
