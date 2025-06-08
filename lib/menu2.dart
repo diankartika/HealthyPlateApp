@@ -3,6 +3,7 @@ import 'menu_basic.dart';
 import 'ing_detail.dart';
 import 'menu_button.dart';
 import 'dart:ui';
+import 'components/navbarbutton.dart'; // ✅ tambahkan ini
 
 class Menu2 extends StatefulWidget {
   const Menu2({super.key});
@@ -22,46 +23,39 @@ class _Menu2 extends State<Menu2> {
     ],
     Steps: ["Step one", "Step Two"],
   );
-  @override
-  void dispose() {
-    super.dispose();
-  }
+
+  int currentTab = 1; // Customize tab = index 1
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      // Important: Don't use any background color here
-      body: Container(
-        // Use a single Stack as the root
-        child: Stack(
-          // Don't use fit: StackFit.expand here
-          children: [
-            // Background image - positioned at the very back
-            Positioned.fill(
-              child: Stack(
-                children: [
-                  Container(color: const Color.fromARGB(255, 36, 36, 36)),
-
-                  // Blur effect layer
-                  Positioned.fill(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-                    ),
+      backgroundColor: const Color(0xFF1A1A1A),
+      body: Stack(
+        children: [
+          // Background layer
+          Positioned.fill(
+            child: Stack(
+              children: [
+                Container(color: const Color.fromARGB(255, 36, 36, 36)),
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // Content layer - positioned on top of the background
-            Positioned.fill(
+          ),
+          // Content layer
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                bottom: 140,
+              ), // untuk memberi ruang navbar
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Safe area for top padding
                   Menubasic(title1: "Let’s Choose Your", title2: "Menu !"),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   MenuButton(
                     menu: item,
                     onNext: () {
@@ -76,8 +70,17 @@ class _Menu2 extends State<Menu2> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: currentTab,
+        onTabSelected: (index) {
+          setState(() {
+            currentTab = index;
+            // navigasi opsional sesuai index
+          });
+        },
       ),
     );
   }

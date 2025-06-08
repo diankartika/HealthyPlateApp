@@ -2,57 +2,65 @@ import 'package:flutter/material.dart';
 import 'scroll_button.dart';
 import 'menu_basic.dart';
 import 'menu2.dart';
+import 'components/navbarbutton.dart';
 import 'dart:ui';
 
 class Menu1 extends StatefulWidget {
   const Menu1({super.key});
 
   @override
-  State<Menu1> createState() => _Menu1();
+  State<Menu1> createState() => _Menu1State();
 }
 
-class _Menu1 extends State<Menu1> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
+class _Menu1State extends State<Menu1> {
+  int currentTab = 1; // karena Menu1 adalah halaman Customize
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      // Important: Don't use any background color here
-      body: Container(
-        // Use a single Stack as the root
-        child: Stack(
-          // Don't use fit: StackFit.expand here
-          children: [
-            // Background image - positioned at the very back
-            Positioned.fill(
-              child: Stack(
-                children: [
-                  Container(color: const Color.fromARGB(255, 36, 36, 36)),
-
-                  // Blur effect layer
-                ],
-              ),
+      backgroundColor: const Color(0xFF1A1A1A),
+      body: Stack(
+        children: [
+          // Background layer + blur
+          Positioned.fill(
+            child: Stack(
+              children: [
+                Container(color: const Color.fromARGB(255, 36, 36, 36)),
+                Positioned.fill(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                    child: Container(
+                      color: const Color.fromARGB(
+                        255,
+                        36,
+                        36,
+                        36,
+                      ).withOpacity(0.2),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            // Content layer - positioned on top of the background
-            Positioned.fill(
+          ),
+
+          // Content
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 140),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Safe area for top padding
-                  Menubasic(title1: "Let’s Set Your Own", title2: "Menu !"),
-                  SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0),
+                  const Menubasic(
+                    title1: "Let’s Set Your Own",
+                    title2: "Menu !",
+                  ),
+                  const SizedBox(height: 24),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 24.0),
                     child: Text(
                       'Whats Your Target',
                       style: TextStyle(
-                        color: Colors.white, // same green as button background
+                        color: Colors.white,
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
@@ -60,13 +68,14 @@ class _Menu1 extends State<Menu1> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: ScrollableButtonGrid(), // <--- Use it here
+                    child: ScrollableButtonGrid(),
                   ),
+                  const SizedBox(height: 24),
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF9ABD40),
-                        foregroundColor: const Color.fromARGB(255, 39, 39, 39),
+                        backgroundColor: const Color(0xFF9ABD40),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 16,
@@ -80,13 +89,13 @@ class _Menu1 extends State<Menu1> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => const Menu2(),
-                          ), // 👈 Replace with your next screen
+                          ),
                         );
                       },
                       child: const Text(
                         'Next',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -95,8 +104,28 @@ class _Menu1 extends State<Menu1> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: currentTab,
+        onTabSelected: (index) {
+          setState(() {
+            currentTab = index;
+          });
+
+          // Navigasi manual antar halaman jika diperlukan
+          if (index == 0) {
+            Navigator.pushReplacementNamed(
+              context,
+              '/home',
+            ); // pastikan route ada
+          } else if (index == 1) {
+            // sedang di halaman ini (Customize), tidak perlu pindah
+          } else if (index == 2) {
+            Navigator.pushReplacementNamed(context, '/account');
+          }
+        },
       ),
     );
   }
