@@ -103,6 +103,7 @@ class _Menu1State extends State<Menu1> {
                     ),
                   ),
                   const SizedBox(height: 12),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Wrap(
@@ -118,14 +119,14 @@ class _Menu1State extends State<Menu1> {
                               labelStyle: TextStyle(
                                 color:
                                     isSelected
-                                        ? Colors.black
+                                        ? Color(0xFF1A1A1A)
                                         : const Color(0xFF9ABD40),
                               ),
                               selectedColor: const Color(0xFF9ABD40),
-                              backgroundColor: Colors.transparent,
+                              backgroundColor: Color.fromARGB(255, 21, 21, 21),
                               shape: StadiumBorder(
                                 side: BorderSide(
-                                  color: const Color(0xFF9ABD40),
+                                  color: const Color(0xFF1A1A1A),
                                 ),
                               ),
                               selected: isSelected,
@@ -216,7 +217,7 @@ class _Menu1State extends State<Menu1> {
 
           // Navigasi manual antar halaman jika diperlukan
           if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, '/home_screen');
           } else if (index == 2) {
             Navigator.pushReplacementNamed(context, '/account');
           }
