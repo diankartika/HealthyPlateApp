@@ -18,20 +18,29 @@ class MenuItem {
   final String calories;
   final List<ingridients> ings;
   final List<String> Steps;
+  final String imagePath;
+
   MenuItem({
     required this.title,
     required this.price,
     required this.calories,
     required this.ings,
     required this.Steps,
+    required this.imagePath,
   });
 }
 
 class MenuButton extends StatelessWidget {
   final MenuItem menu;
   final VoidCallback onNext;
+  final int index; // ✅ Tambahkan index untuk menampilkan nomor menu
 
-  const MenuButton({super.key, required this.menu, required this.onNext});
+  const MenuButton({
+    super.key,
+    required this.menu,
+    required this.onNext,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,15 +61,18 @@ class MenuButton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Menu 1",
-            style: TextStyle(
+          // ✅ Menu title dinamis
+          Text(
+            "Menu ${index + 1}",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 16),
+
+          // Judul menu
           Text(
             menu.title,
             style: const TextStyle(
@@ -70,6 +82,8 @@ class MenuButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+
+          // Harga
           Text(
             menu.price,
             style: const TextStyle(
@@ -79,6 +93,8 @@ class MenuButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+
+          // Kalori
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -88,12 +104,14 @@ class MenuButton extends StatelessWidget {
             child: Text(
               menu.calories,
               style: const TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           const SizedBox(height: 20),
+
+          // Tombol
           Center(
             child: ElevatedButton(
               onPressed: onNext,

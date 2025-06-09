@@ -1,133 +1,156 @@
-import 'menu_button.dart';
-import 'menu_basic.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'step_detail.dart';
+import 'menu_button.dart'; // ✅ import MenuItem, ingridients, dsb
+import 'menu_basic.dart';
 
 class IngDetail extends StatelessWidget {
   final MenuItem menuItem;
 
   const IngDetail({super.key, required this.menuItem});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Important: Don't use any background color here
-      body: Container(
-        // Use a single Stack as the root
-        child: Stack(
-          // Don't use fit: StackFit.expand here
-          children: [
-            // Background image - positioned at the very back
-            Positioned.fill(
-              child: Stack(
-                children: [
-                  Container(color: const Color.fromARGB(255, 36, 36, 36)),
-
-                  // Blur effect layer
-                  Positioned.fill(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-                      child: Container(
-                        // Optional: tint color
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+      backgroundColor: const Color(0xFF1A1A1A),
+      body: Stack(
+        children: [
+          // Background blur layer
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+              child: Container(
+                color: Colors.black.withAlpha(51),
+              ), // ✅ no deprecation warning
             ),
-            // Content layer - positioned on top of the background
-            Positioned.fill(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Menubasic(title1: "Let’s Cook", title2: ""),
-                  Container(
-                    margin: const EdgeInsets.all(16),
+          ),
+
+          // Content layer
+          Positioned.fill(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Menubasic(
+                  title1: "Let’s Cook!",
+                  title2: "",
+                ), // ✅ stepper assumed inside
+                // Main content
+                Expanded(
+                  child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2D2D2D),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
-                          blurRadius: 12,
-                          offset: const Offset(4, 4),
-                        ),
-                      ], // light gray background
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          menuItem.title,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // "How to cook" button
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => StepDetail(menuItem: menuItem),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2D2D2D),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          // Menu image
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                menuItem.imagePath,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF9ABD40),
-                            shape: StadiumBorder(),
-                          ),
-                          child: const Text(
-                            'How to cook',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
-                        // Table headers
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Ingredient",
+                          // Menu title
+                          Text(
+                            menuItem.title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 12),
+
+                          // How to cook button
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          StepDetail(menuItem: menuItem),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF9ABD40),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'How to cook',
                               style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              "Quantity",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Price",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(),
+                          ),
 
-                        // Scrollable ingredients
-                        SizedBox(
-                          height: 200,
-                          child: ListView.separated(
+                          const SizedBox(height: 20),
+
+                          // Table header
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Ingredient",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Quantity",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Price",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(color: Colors.grey),
+
+                          // Ingredients
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: menuItem.ings.length,
-                            separatorBuilder: (_, __) => const Divider(),
+                            separatorBuilder:
+                                (_, __) => const Divider(color: Colors.grey),
                             itemBuilder: (context, index) {
                               final item = menuItem.ings[index];
                               return Row(
@@ -135,43 +158,31 @@ class IngDetail extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
+                                    flex: 3,
                                     child: Text(
-                                      style: TextStyle(
-                                        color: Color.fromARGB(
-                                          255,
-                                          255,
-                                          255,
-                                          255,
-                                        ),
-                                      ),
                                       item.ing.Name,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                   Expanded(
+                                    flex: 2,
                                     child: Text(
-                                      style: TextStyle(
-                                        color: Color.fromARGB(
-                                          255,
-                                          255,
-                                          255,
-                                          255,
-                                        ),
+                                      '${item.amount}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                       ),
-                                      item.amount.toString(),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
                                   Expanded(
+                                    flex: 2,
                                     child: Text(
-                                      style: TextStyle(
-                                        color: Color.fromARGB(
-                                          255,
-                                          255,
-                                          255,
-                                          255,
-                                        ),
+                                      'Rp${item.ing.price}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                       ),
-                                      item.ing.price.toString(),
                                       textAlign: TextAlign.right,
                                     ),
                                   ),
@@ -179,15 +190,15 @@ class IngDetail extends StatelessWidget {
                               );
                             },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
