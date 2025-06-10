@@ -54,6 +54,105 @@ class _Menu2State extends State<Menu2> {
         "Finish with lime",
       ],
     ),
+    MenuItem(
+      title: "Chicken Caesar Salad",
+      price: "Rp25.000 - Rp33.000",
+      calories: "180-250 Cal",
+      imagePath: "assets/images/salad.png",
+      ings: [
+        ingridients(
+          ing: ingridient(Name: "Romaine lettuce", price: 4000),
+          amount: 50,
+        ),
+        ingridients(
+          ing: ingridient(Name: "Grilled Chicken", price: 10000),
+          amount: 80,
+        ),
+        ingridients(
+          ing: ingridient(Name: "Caesar Dressing", price: 5000),
+          amount: 30,
+        ),
+      ],
+      Steps: ["Chop lettuce", "Grill chicken", "Add dressing", "Mix and serve"],
+    ),
+    MenuItem(
+      title: "Spaghetti Carbonara",
+      price: "Rp32.000 - Rp40.000",
+      calories: "400-470 Cal",
+      imagePath: "assets/images/carbonara.png",
+      ings: [
+        ingridients(
+          ing: ingridient(Name: "Spaghetti", price: 5000),
+          amount: 100,
+        ),
+        ingridients(ing: ingridient(Name: "Egg yolk", price: 2000), amount: 2),
+        ingridients(
+          ing: ingridient(Name: "Smoked beef", price: 8000),
+          amount: 50,
+        ),
+      ],
+      Steps: [
+        "Boil pasta",
+        "Cook beef",
+        "Mix egg yolk & cheese",
+        "Combine all",
+      ],
+    ),
+    MenuItem(
+      title: "Tuna Mayo Onigiri",
+      price: "Rp18.000 - Rp25.000",
+      calories: "200-240 Cal",
+      imagePath: "assets/images/onigiri.png",
+      ings: [
+        ingridients(ing: ingridient(Name: "Rice", price: 4000), amount: 100),
+        ingridients(ing: ingridient(Name: "Tuna", price: 6000), amount: 50),
+        ingridients(
+          ing: ingridient(Name: "Mayonnaise", price: 3000),
+          amount: 20,
+        ),
+      ],
+      Steps: [
+        "Mix tuna & mayo",
+        "Form rice balls",
+        "Fill with tuna",
+        "Wrap with nori",
+      ],
+    ),
+    MenuItem(
+      title: "Vegan Chickpea Curry",
+      price: "Rp27.000 - Rp35.000",
+      calories: "320-370 Cal",
+      imagePath: "assets/images/chickpea_curry.png",
+      ings: [
+        ingridients(
+          ing: ingridient(Name: "Chickpeas", price: 5000),
+          amount: 100,
+        ),
+        ingridients(
+          ing: ingridient(Name: "Tomato puree", price: 4000),
+          amount: 50,
+        ),
+        ingridients(ing: ingridient(Name: "Onion", price: 2000), amount: 1),
+      ],
+      Steps: [
+        "Sauté onion",
+        "Add tomato & chickpeas",
+        "Simmer with spices",
+        "Serve with rice",
+      ],
+    ),
+    MenuItem(
+      title: "Avocado Toast With Egg",
+      price: "Rp22.000 - Rp30.000",
+      calories: "250-300 Cal",
+      imagePath: "assets/images/avocado_toast.png",
+      ings: [
+        ingridients(ing: ingridient(Name: "Bread", price: 3000), amount: 2),
+        ingridients(ing: ingridient(Name: "Avocado", price: 8000), amount: 1),
+        ingridients(ing: ingridient(Name: "Egg", price: 3000), amount: 1),
+      ],
+      Steps: ["Toast bread", "Mash avocado", "Fry egg", "Assemble and season"],
+    ),
   ];
 
   @override
