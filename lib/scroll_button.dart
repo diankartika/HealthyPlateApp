@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ScrollableButtonGrid extends StatefulWidget {
+  final void Function(Set<String>) onTargetSelected;
+  const ScrollableButtonGrid({super.key, required this.onTargetSelected});
+
   @override
   _ScrollableButtonGridState createState() => _ScrollableButtonGridState();
 }
 
 class _ScrollableButtonGridState extends State<ScrollableButtonGrid> {
-  // Sample data with label and unique ID
   final List<Map<String, dynamic>> buttonData = [
     {'id': 0, 'label': 'Weight Loss'},
     {'id': 1, 'label': 'Muscle Gain'},
@@ -25,12 +27,10 @@ class _ScrollableButtonGridState extends State<ScrollableButtonGrid> {
     {'id': 14, 'label': 'Raw Food'},
   ];
 
-  // Track selected buttons by ID
   final Set<int> selectedButtons = {};
 
   @override
   Widget build(BuildContext context) {
-    // Split data into columns of 3 rows each
     final int rowsPerColumn = 3;
     final int totalColumns = (buttonData.length / rowsPerColumn).ceil();
 
@@ -85,6 +85,13 @@ class _ScrollableButtonGridState extends State<ScrollableButtonGrid> {
                                   selectedButtons.add(data['id']);
                                 }
                               });
+                              widget.onTargetSelected(
+                                selectedButtons
+                                    .map(
+                                      (id) => buttonData[id]['label'] as String,
+                                    )
+                                    .toSet(),
+                              );
                             },
                             child: Text(data['label']),
                           ),
