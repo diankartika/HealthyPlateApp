@@ -1,6 +1,7 @@
 import 'dart:ui';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,18 +12,41 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
-  bool _rememberMe = false;
-
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+      if (gUser == null) return;
+
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken,
+        idToken: gAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (!mounted) return;
+      Navigator.pop(context); // or go to home
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder:
+            (_) => AlertDialog(
+              title: const Text('Google Sign-In Failed'),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+      );
+    }
   }
 
   @override
@@ -32,27 +56,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background layer (resolved merge conflict)
           Positioned.fill(
             child: Stack(
               children: [
                 Image.asset('assets/images/bg_2.png', fit: BoxFit.cover),
                 Positioned.fill(
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                     child: Container(color: Colors.black.withOpacity(0.2)),
                   ),
                 ),
               ],
             ),
           ),
-
-          // Foreground content
           Positioned.fill(
             child: Column(
               children: [
                 SafeArea(
-                  bottom: false,
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
@@ -75,7 +95,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -98,30 +117,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 32),
 
-                        // Name
-                        _buildInputField(
-                          controller: _nameController,
-                          hintText: 'Full Name',
-                          icon: Icons.person,
-                        ),
-                        const SizedBox(height: 16),
-
                         // Email
                         _buildInputField(
                           controller: _emailController,
-                          hintText: 'mowani@saru.com',
+                          hintText: 'Email',
                           icon: Icons.email,
-                          suffix: const Icon(
-                            Icons.check,
-                            color: Color(0xFF9ABD40),
-                          ),
                         ),
                         const SizedBox(height: 16),
 
                         // Password
                         _buildInputField(
                           controller: _passwordController,
-                          hintText: '••••••••••••••••',
+                          hintText: 'Password',
                           icon: Icons.lock,
                           isPassword: true,
                           obscureText: _obscurePassword,
@@ -131,70 +138,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             });
                           },
                         ),
-                        const SizedBox(height: 24),
-
-                        // Remember Me + Forgot Password
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap:
-                                  () => setState(() {
-                                    _rememberMe = !_rememberMe;
-                                  }),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color:
-                                          _rememberMe
-                                              ? const Color(0xFF9ABD40)
-                                              : Colors.transparent,
-                                      border:
-                                          _rememberMe
-                                              ? null
-                                              : Border.all(
-                                                color: const Color(0xFF9ABD40),
-                                              ),
-                                    ),
-                                    child:
-                                        _rememberMe
-                                            ? const Icon(
-                                              Icons.check,
-                                              size: 16,
-                                              color: Color(0xFF282828),
-                                            )
-                                            : null,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    'Remember me',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                'Forgot Password?',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 32),
 
-                        // Sign Up Button
+                        // Sign Up button
                         SizedBox(
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton(
-                            onPressed: () {
-                              debugPrint('Register pressed');
+                            onPressed: () async {
+                              try {
+                                await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text.trim(),
+                                    );
+                                if (!mounted) return;
+                                Navigator.pop(context);
+                              } on FirebaseAuthException catch (e) {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (_) => AlertDialog(
+                                        title: const Text(
+                                          'Registration Failed',
+                                        ),
+                                        content: Text(
+                                          e.message ?? 'Unknown error',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.pop(context),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF9ABD40),
@@ -214,34 +194,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Or continue with
-                        Row(
-                          children: const [
-                            Expanded(child: Divider(color: Colors.white54)),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                "Or continue with",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            Expanded(child: Divider(color: Colors.white54)),
-                          ],
+                        const Center(
+                          child: Text(
+                            "Or continue with",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                         const SizedBox(height: 16),
 
-                        // Social Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _buildSocialButton('assets/google.png'),
-                            _buildSocialButton('assets/apple.png'),
-                            _buildSocialButton('assets/facebook.png'),
-                          ],
+                        // Google only
+                        Center(
+                          child: GestureDetector(
+                            onTap: _signInWithGoogle,
+                            child: CircleAvatar(
+                              radius: 28,
+                              backgroundColor: Colors.white,
+                              child: Image.asset(
+                                'assets/images/google.png', // pastikan ada file ini
+                                width: 24,
+                                height: 24,
+                              ),
+                            ),
+                          ),
                         ),
                         const Spacer(),
 
-                        // Already have an account?
+                        // Back to login
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -250,9 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(color: Colors.white),
                             ),
                             TextButton(
-                              onPressed: () {
-                                Navigator.pop(context); // back to login
-                              },
+                              onPressed: () => Navigator.pop(context),
                               child: const Text(
                                 'Sign In',
                                 style: TextStyle(color: Color(0xFF9ABD40)),
@@ -279,7 +255,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? onToggleObscure,
-    Widget? suffix,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -303,19 +278,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     onPressed: onToggleObscure,
                   )
-                  : suffix,
+                  : null,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
       ),
-    );
-  }
-
-  Widget _buildSocialButton(String assetPath) {
-    return CircleAvatar(
-      radius: 24,
-      backgroundColor: Colors.white,
-      child: Image.asset(assetPath, width: 24, height: 24),
     );
   }
 }

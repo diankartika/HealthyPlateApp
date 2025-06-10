@@ -4,6 +4,7 @@ import 'register_screen.dart';
 // import 'menu_1.dart';
 import 'dart:ui';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -261,16 +262,38 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: double.infinity,
                             height: 56,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Handle login
-                                print('Login button pressed');
-                                // Add your login logic here
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const HomeScreen(),
-                                  ),
-                                );
+                              onPressed: () async {
+                                final email = _nameController.text.trim();
+                                final password = _passwordController.text;
+
+                                try {
+                                  final credential = await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                        email: email,
+                                        password: password,
+                                      );
+                                  print(
+                                    '✅ Login success: ${credential.user?.email}',
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const HomeScreen(),
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  String message = 'Login failed.';
+
+                                  if (e.code == 'user-not-found') {
+                                    message = 'User not found';
+                                  } else if (e.code == 'wrong-password') {
+                                    message = 'Wrong password';
+                                  }
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(message)),
+                                  );
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF9ABD40),
