@@ -55,7 +55,7 @@
 
 ## 🔗 Unduh APK
 
-Versi rilis terbaru aplikasi HealthyPlate tersedia di halaman [Releases](https://github.com/diankartika/healthyplateapp/releases).
+Versi rilis terbaru aplikasi HealthyPlate tersedia di halaman [Releases] (https://github.com/diankartika/HealthyPlateApp/commits/v1.2.0)
 
 
 ---
