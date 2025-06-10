@@ -3,7 +3,8 @@ import 'login_screen.dart';
 import 'register_screen.dart';
 // import 'menu2.dart';
 import 'account_screen.dart'; // ✅ gunakan file account_screen.dart kamu
-import 'menu_1.dart'; // ✅ penting: untuk mengenali class Menu1
+import 'menu_1.dart';
+import 'home_screen.dart'; // ✅ penting: untuk mengenali class Menu1
 
 void main() {
   runApp(const MyApp());
@@ -26,8 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/home_screen':
-            (context) => const WelcomeScreen(), // ✅ kembali ke welcome
+        '/home_screen': (context) => const HomeScreen(), // ✅ kembali ke welcome
         '/menu_1': (context) => const Menu1(), // ✅ ganti ke menu_1.dart
         '/account': (context) => const AccountScreen(),
       },
