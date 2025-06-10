@@ -90,7 +90,7 @@ class CustomBottomNav extends StatelessWidget {
     String targetRoute;
     switch (index) {
       case 0:
-        targetRoute = '/home_screen';
+        targetRoute = '/home_screen'; // ✅ pastikan ini bukan WelcomeScreen lagi
         break;
       case 1:
         targetRoute = '/menu_1';
@@ -104,7 +104,10 @@ class CustomBottomNav extends StatelessWidget {
 
     // Hindari push jika sudah di halaman yang sama
     if (ModalRoute.of(context)?.settings.name != targetRoute) {
-      Navigator.pushReplacementNamed(context, targetRoute);
+      Navigator.pushNamed(
+        context,
+        targetRoute,
+      ); // ✅ Ganti dari pushReplacementNamed
     }
   }
 }
