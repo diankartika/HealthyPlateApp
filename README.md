@@ -55,7 +55,9 @@
 
 ## 🔗 Unduh APK
 
-Versi rilis terbaru aplikasi HealthyPlate tersedia dengan mengunduh langsung: [Download HealthyPlate.apk]
+## 🔗 Unduh APK
+
+Versi rilis terbaru aplikasi HealthyPlate tersedia di halaman [Releases](https://github.com/[username]/[repo]/releases).
 
 
 ---
