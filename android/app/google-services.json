@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621760606382",
+    "project_id": "healthyplateapp-8d323",
+    "storage_bucket": "healthyplateapp-8d323.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621760606382:android:851bef1f69d1f7d1d13d3f",
+        "android_client_info": {
+          "package_name": "com.example.healthy_plate_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALhhNK25Lq3OGKJnl9tEbkJhGHpn-lxGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

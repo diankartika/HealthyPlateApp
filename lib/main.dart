@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
-// import 'menu2.dart';
-import 'account_screen.dart'; // ✅ gunakan file account_screen.dart kamu
+import 'account_screen.dart';
 import 'menu_1.dart';
-import 'home_screen.dart'; // ✅ penting: untuk mengenali class Menu1
+import 'home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -27,8 +30,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/home_screen': (context) => const HomeScreen(), // ✅ kembali ke welcome
-        '/menu_1': (context) => const Menu1(), // ✅ ganti ke menu_1.dart
+        '/home_screen': (context) => const HomeScreen(),
+        '/menu_1': (context) => const Menu1(),
         '/account': (context) => const AccountScreen(),
       },
     );
@@ -43,12 +46,9 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image (full screen)
           Positioned.fill(
             child: Image.asset('assets/images/bg_1.png', fit: BoxFit.cover),
           ),
-
-          // Main content
           SafeArea(
             child: Column(
               children: [
