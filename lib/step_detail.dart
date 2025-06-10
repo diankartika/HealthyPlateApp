@@ -124,19 +124,7 @@ class _StepDetailState extends State<StepDetail> {
       ),
 
       // ✅ Bottom navigation bar
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: currentTab,
-        onTabSelected: (index) {
-          setState(() => currentTab = index);
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home_screen');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/customize');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/account');
-          }
-        },
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: currentTab),
     );
   }
 }

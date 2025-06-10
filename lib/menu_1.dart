@@ -208,21 +208,7 @@ class _Menu1State extends State<Menu1> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: currentTab,
-        onTabSelected: (index) {
-          setState(() {
-            currentTab = index;
-          });
-
-          // Navigasi manual antar halaman jika diperlukan
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home_screen');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/account');
-          }
-        },
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: currentTab),
     );
   }
 

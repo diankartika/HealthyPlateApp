@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'menu_1.dart';
-import 'components/navbarbutton.dart'; // pastikan path ini benar
+import 'menu_button.dart';
+import 'ing_detail.dart';
+import 'components/navbarbutton.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentTab = 0;
 
   static const List<Map<String, dynamic>> foodList = [
     {
@@ -37,36 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
-      body: IndexedStack(
-        index: currentTab,
-        children: [
-          _buildHomeContent(context),
-          const Center(
-            child: Text(
-              "Customize Page",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          const Center(
-            child: Text("Account Page", style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: currentTab,
-        onTabSelected: (index) {
-          setState(() {
-            currentTab = index;
-          });
-        },
-      ),
-    );
-  }
-
-  Widget _buildHomeContent(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,10 +137,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   onPressed: () {
+                                    // ⬇️ Buat dummy MenuItem dari data foodList
+                                    final dummyMenu = MenuItem(
+                                      title: food['name']!,
+                                      price: food['price']!,
+                                      calories: food['calories']!,
+                                      imagePath: food['image']!,
+                                      ings: [
+                                        ingridients(
+                                          ing: ingridient(
+                                            Name: "Chicken",
+                                            price: 12000,
+                                          ),
+                                          amount: 100,
+                                        ),
+                                        ingridients(
+                                          ing: ingridient(
+                                            Name: "Spices",
+                                            price: 3000,
+                                          ),
+                                          amount: 10,
+                                        ),
+                                      ],
+                                      Steps: [
+                                        "Prepare ingredients",
+                                        "Grill or sauté",
+                                        "Serve with sauce",
+                                      ],
+                                    );
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => const Menu1(),
+                                        builder:
+                                            (_) =>
+                                                IngDetail(menuItem: dummyMenu),
                                       ),
                                     );
                                   },
@@ -224,13 +222,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(
-                height: 100,
-              ), // ✅ beri jarak agar tidak nabrak navbar
+              const SizedBox(height: 100),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: const CustomBottomNav(currentIndex: 0),
     );
   }
 }

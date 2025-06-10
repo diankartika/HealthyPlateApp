@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
+// import 'menu2.dart';
+import 'account_screen.dart'; // ✅ gunakan file account_screen.dart kamu
+import 'menu_1.dart'; // ✅ penting: untuk mengenali class Menu1
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +23,14 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Montserrat',
       ),
       home: const WelcomeScreen(),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home_screen':
+            (context) => const WelcomeScreen(), // ✅ kembali ke welcome
+        '/menu_1': (context) => const Menu1(), // ✅ ganti ke menu_1.dart
+        '/account': (context) => const AccountScreen(),
+      },
     );
   }
 }
@@ -41,26 +52,17 @@ class WelcomeScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                // Kosongkan bagian atas (atau bisa tambahkan logo/welcome text)
                 const Spacer(),
-
-                // Tombol-tombol (akan selalu berada di bawah)
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                     children: [
-                      // Login Button
                       SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/login');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF9ABD40),
@@ -78,21 +80,13 @@ class WelcomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 16),
-
-                      // Create Account Button
                       SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: OutlinedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const RegisterScreen(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/register');
                           },
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Color(0xFFD2D2D2)),

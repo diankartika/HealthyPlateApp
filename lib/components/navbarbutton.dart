@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomBottomNav extends StatelessWidget {
   final int currentIndex;
-  final Function(int) onTabSelected;
 
-  const CustomBottomNav({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+  const CustomBottomNav({super.key, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120, // agar cukup ruang untuk tombol tengah
+      height: 120,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -30,9 +25,9 @@ class CustomBottomNav extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _navItem(Icons.home, "Home", 0),
+                  _navItem(context, Icons.home, "Home", 0),
                   const SizedBox(width: 60),
-                  _navItem(Icons.person, "Account", 2),
+                  _navItem(context, Icons.person, "Account", 2),
                 ],
               ),
             ),
@@ -40,7 +35,7 @@ class CustomBottomNav extends StatelessWidget {
           Positioned(
             bottom: 35,
             child: GestureDetector(
-              onTap: () => onTabSelected(1),
+              onTap: () => _handleNavigation(context, 1),
               child: Container(
                 width: 80,
                 height: 80,
@@ -68,9 +63,14 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 
-  Widget _navItem(IconData icon, String label, int index) {
+  Widget _navItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    int index,
+  ) {
     return GestureDetector(
-      onTap: () => onTabSelected(index),
+      onTap: () => _handleNavigation(context, index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -84,5 +84,27 @@ class CustomBottomNav extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _handleNavigation(BuildContext context, int index) {
+    String targetRoute;
+    switch (index) {
+      case 0:
+        targetRoute = '/home_screen';
+        break;
+      case 1:
+        targetRoute = '/menu_1';
+        break;
+      case 2:
+        targetRoute = '/account';
+        break;
+      default:
+        return;
+    }
+
+    // Hindari push jika sudah di halaman yang sama
+    if (ModalRoute.of(context)?.settings.name != targetRoute) {
+      Navigator.pushReplacementNamed(context, targetRoute);
+    }
   }
 }

@@ -58,8 +58,8 @@ class _Menu2State extends State<Menu2> {
 
   @override
   Widget build(BuildContext context) {
-    final padding = MediaQuery.of(context).padding;
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final padding = MediaQuery.of(context).padding;
+    // final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
@@ -135,12 +135,7 @@ class _Menu2State extends State<Menu2> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: currentTab,
-        onTabSelected: (index) {
-          setState(() => currentTab = index);
-        },
-      ),
+      bottomNavigationBar: CustomBottomNav(currentIndex: currentTab),
     );
   }
 }
