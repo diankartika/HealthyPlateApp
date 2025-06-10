@@ -33,10 +33,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -64,6 +61,16 @@ class DefaultFirebaseOptions {
     projectId: 'healthyplateapp-8d323',
     storageBucket: 'healthyplateapp-8d323.firebasestorage.app',
     iosBundleId: 'com.example.healthyPlateApp',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAtHWTG19zWHk9IgEfkoj6h_jpX-f8RQrU',
+    appId: '1:621760606382:web:9b1c5d6a48a202b3d13d3f',
+    messagingSenderId: '621760606382',
+    projectId: 'healthyplateapp-8d323',
+    authDomain: 'healthyplateapp-8d323.firebaseapp.com',
+    storageBucket: 'healthyplateapp-8d323.firebasestorage.app',
+    measurementId: 'G-VP1WY4JYHB',
   );
 
 }
