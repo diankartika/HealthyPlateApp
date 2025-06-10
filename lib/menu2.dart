@@ -39,19 +39,32 @@ class _Menu2State extends State<Menu2> {
   }
 
   List<MenuItem> _filterMenu(List<MenuItem> fullList) {
+    if (widget.ignoreFilters ||
+        (widget.selectedPreferences.isEmpty &&
+            widget.selectedTargets.isEmpty &&
+            widget.minBudget == 30000 &&
+            widget.maxBudget == 45000)) {
+      return fullList;
+    }
     return fullList.where((item) {
+      // Filter budget
       final prices = item.price.replaceAll("Rp", "").split(" - ");
       final minPrice = int.tryParse(prices[0].replaceAll(".", "")) ?? 0;
       final maxPrice = int.tryParse(prices[1].replaceAll(".", "")) ?? 999999;
-
       final matchesBudget =
           minPrice >= widget.minBudget && maxPrice <= widget.maxBudget;
-      final matchesPref = widget.selectedPreferences.any(
-        (p) => item.title.toLowerCase().contains(p.toLowerCase()),
-      );
-      final matchesTarget = widget.selectedTargets.any(
-        (t) => item.title.toLowerCase().contains(t.toLowerCase()),
-      );
+
+      // Filter preferensi (jika ada yang dipilih)
+      final matchesPref =
+          widget.selectedPreferences.isEmpty ||
+          item.preferencesTags.any(
+            (tag) => widget.selectedPreferences.contains(tag),
+          );
+
+      // Filter target (jika ada yang dipilih)
+      final matchesTarget =
+          widget.selectedTargets.isEmpty ||
+          item.targetsTags.any((tag) => widget.selectedTargets.contains(tag));
 
       return matchesBudget && (matchesPref || matchesTarget);
     }).toList();

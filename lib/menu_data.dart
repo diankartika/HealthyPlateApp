@@ -1,11 +1,35 @@
 import 'menu_button.dart';
 
+class MenuItem1 {
+  final String title;
+  final String price;
+  final String calories;
+  final String imagePath;
+  final List<ingridients> ings;
+  final List<String> Steps;
+  final Set<String> preferencesTags;
+  final Set<String> targetsTags;
+
+  MenuItem1({
+    required this.title,
+    required this.price,
+    required this.calories,
+    required this.imagePath,
+    required this.ings,
+    required this.Steps,
+    this.preferencesTags = const {},
+    this.targetsTags = const {},
+  });
+}
+
 final List<MenuItem> menuList = [
   MenuItem(
     title: "Stir-Fry Noodle With Beef",
     price: "Rp30.000 - Rp40.000",
     calories: "150-220 Cal",
     imagePath: "assets/images/stirfry.png",
+    preferencesTags: {'Stir-Fried', 'High-Protein'},
+    targetsTags: {'Muscle Gain', 'High Protein'},
     ings: [
       ingridients(
         ing: ingridient(Name: "Egg noodles", price: 4000),
@@ -47,6 +71,8 @@ final List<MenuItem> menuList = [
     price: "Rp35.000 - Rp43.000",
     calories: "300-350 Cal",
     imagePath: "assets/images/food1.png",
+    preferencesTags: {'Salads', 'Low-Carb'},
+    targetsTags: {'Balanced Diet'},
     ings: [
       ingridients(
         ing: ingridient(Name: "Shrimp, peeled and deveined", price: 8000),
@@ -77,7 +103,6 @@ final List<MenuItem> menuList = [
         amount: 1,
       ), // tbsp
     ],
-
     Steps: [
       "Boil 500ml of water or chicken broth in a pot.",
       "Add crushed lemongrass and simmer for 5 minutes.",
@@ -93,6 +118,13 @@ final List<MenuItem> menuList = [
     price: "Rp25.000 - Rp33.000",
     calories: "180-250 Cal",
     imagePath: "assets/images/salad.png",
+    preferencesTags: {'Salads', 'Grilled Dishes', 'Low-Carb'},
+    targetsTags: {
+      'Weight Loss',
+      'Balanced Diet',
+      'Heart Healthy',
+      'High Protein',
+    },
     ings: [
       ingridients(
         ing: ingridient(Name: "Romaine lettuce", price: 4000),
@@ -130,6 +162,8 @@ final List<MenuItem> menuList = [
     price: "Rp32.000 - Rp40.000",
     calories: "400-470 Cal",
     imagePath: "assets/images/carbonara.png",
+    preferencesTags: {},
+    targetsTags: {},
     ings: [
       ingridients(
         ing: ingridient(Name: "Spaghetti", price: 5000),
@@ -167,6 +201,8 @@ final List<MenuItem> menuList = [
     price: "Rp18.000 - Rp25.000",
     calories: "200-240 Cal",
     imagePath: "assets/images/onigiri.png",
+    preferencesTags: {'Snacks & Light'},
+    targetsTags: {'Balanced Diet'},
     ings: [
       ingridients(
         ing: ingridient(Name: "Cooked Japanese rice", price: 4000),
@@ -204,6 +240,8 @@ final List<MenuItem> menuList = [
     price: "Rp27.000 - Rp35.000",
     calories: "320-370 Cal",
     imagePath: "assets/images/chickpea_curry.png",
+    preferencesTags: {'Vegetarian', 'Vegan'},
+    targetsTags: {'Weight Loss', 'Balanced Diet'},
     ings: [
       ingridients(
         ing: ingridient(Name: "Boiled chickpeas", price: 5000),
@@ -242,6 +280,8 @@ final List<MenuItem> menuList = [
     price: "Rp22.000 - Rp30.000",
     calories: "250-300 Cal",
     imagePath: "assets/images/avocado_toast.png",
+    preferencesTags: {'Breakfast'},
+    targetsTags: {'Heart Healthy', 'Balanced Diet'},
     ings: [
       ingridients(
         ing: ingridient(Name: "Bread slice", price: 3000),
