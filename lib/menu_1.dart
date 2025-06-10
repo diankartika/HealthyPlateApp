@@ -213,6 +213,7 @@ class _Menu1State extends State<Menu1> {
                                   selectedPreferences: selectedPreferences,
                                   minBudget: min,
                                   maxBudget: max,
+                                  ignoreFilters: true,
                                 ),
                           ),
                         );

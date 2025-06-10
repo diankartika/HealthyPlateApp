@@ -12,6 +12,7 @@ class Menu2 extends StatefulWidget {
   final Set<String> selectedPreferences;
   final int minBudget;
   final int maxBudget;
+  final bool ignoreFilters;
 
   const Menu2({
     super.key,
@@ -19,6 +20,7 @@ class Menu2 extends StatefulWidget {
     required this.selectedPreferences,
     required this.minBudget,
     required this.maxBudget,
+    this.ignoreFilters = false,
   });
 
   @override
