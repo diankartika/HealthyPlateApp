@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,36 +17,140 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // Updated _signInWithGoogle method with better error handling and debugging
+
   Future<void> _signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      if (gUser == null) return;
+      print('🔄 Starting Google Sign-In process...');
 
-      final GoogleSignInAuthentication gAuth = await gUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken,
-        idToken: gAuth.idToken,
+      // Initialize GoogleSignIn - remove explicit scopes if causing issues
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        // Try without scopes first
+        // scopes: ['email'], // Comment this out temporarily
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      // Sign out first to ensure clean state
+      await googleSignIn.signOut();
+      print('✅ Signed out from previous session');
+
+      // Trigger the authentication flow
+      final GoogleSignInAccount? gUser = await googleSignIn.signIn();
+
+      if (gUser == null) {
+        print('❌ Google Sign-In cancelled by user');
+        return;
+      }
+
+      print('✅ Google account selected: ${gUser.email}');
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+      print(
+        '🔍 Access Token: ${gAuth.accessToken != null ? "Present" : "Missing"}',
+      );
+      print('🔍 ID Token: ${gAuth.idToken != null ? "Present" : "Missing"}');
+
+      if (gAuth.accessToken == null || gAuth.idToken == null) {
+        throw Exception('Failed to get Google authentication tokens');
+      }
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken!,
+        idToken: gAuth.idToken!,
+      );
+
+      print('✅ Firebase credential created');
+
+      // Sign in to Firebase with the Google credential
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw Exception('Failed to get user from Firebase Auth');
+      }
+
+      print('✅ Firebase Auth successful: ${user.email}');
+
+      // Check if user document exists in Firestore
+      final userDoc =
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.uid)
+              .get();
+
+      // Create user document if it doesn't exist
+      if (!userDoc.exists) {
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "email": user.email ?? '',
+          "name": user.displayName ?? '',
+          "photoURL": user.photoURL ?? '',
+          "createdAt": Timestamp.now(),
+          "loginMethod": "google",
+        });
+        print('✅ New user document created in Firestore');
+      } else {
+        print('✅ Existing user found in Firestore');
+      }
 
       if (!mounted) return;
-      Navigator.pop(context); // or go to home
+
+      print('✅ Google Sign-In complete, navigating to home...');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     } catch (e) {
-      showDialog(
-        context: context,
-        builder:
-            (_) => AlertDialog(
-              title: const Text('Google Sign-In Failed'),
-              content: Text(e.toString()),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
+      print('❌ Google Sign-In error details: $e');
+      print('❌ Error type: ${e.runtimeType}');
+
+      if (!mounted) return;
+
+      String errorMessage = 'Google Sign-In failed';
+
+      // More specific error handling
+      if (e is FirebaseAuthException) {
+        print('❌ Firebase Auth Error Code: ${e.code}');
+        print('❌ Firebase Auth Error Message: ${e.message}');
+
+        switch (e.code) {
+          case 'account-exists-with-different-credential':
+            errorMessage =
+                'An account already exists with a different sign-in method.';
+            break;
+          case 'invalid-credential':
+            errorMessage = 'The credential is invalid or has expired.';
+            break;
+          case 'operation-not-allowed':
+            errorMessage = 'Google Sign-In is not enabled in Firebase Console.';
+            break;
+          case 'user-disabled':
+            errorMessage = 'This user account has been disabled.';
+            break;
+          default:
+            errorMessage = 'Firebase Auth error: ${e.message}';
+        }
+      } else if (e.toString().contains('network_error')) {
+        errorMessage = 'Network error. Please check your internet connection.';
+      } else if (e.toString().contains('sign_in_canceled')) {
+        errorMessage = 'Sign-in was cancelled.';
+      } else if (e.toString().contains('sign_in_failed')) {
+        errorMessage = 'Sign-in failed. Please try again.';
+      } else if (e.toString().contains('PlatformException')) {
+        errorMessage =
+            'Platform error. Please check your Google Services configuration.';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
       );
     }
   }
@@ -147,32 +253,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: ElevatedButton(
                             onPressed: () async {
                               try {
-                                await FirebaseAuth.instance
+                                final credential = await FirebaseAuth.instance
                                     .createUserWithEmailAndPassword(
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
                                     );
+
+                                // Create user document in Firestore
+                                final user = credential.user;
+                                if (user != null) {
+                                  await FirebaseFirestore.instance
+                                      .collection("users")
+                                      .doc(user.uid)
+                                      .set({
+                                        "uid": user.uid,
+                                        "email": user.email ?? '',
+                                        "name": '',
+                                        "photoURL": '',
+                                        "createdAt": Timestamp.now(),
+                                        "loginMethod": "email",
+                                      });
+                                }
+
                                 if (!mounted) return;
                                 Navigator.pop(context);
                               } on FirebaseAuthException catch (e) {
-                                showDialog(
-                                  context: context,
-                                  builder:
-                                      (_) => AlertDialog(
-                                        title: const Text(
-                                          'Registration Failed',
-                                        ),
-                                        content: Text(
-                                          e.message ?? 'Unknown error',
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed:
-                                                () => Navigator.pop(context),
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      ),
+                                String errorMessage = 'Registration failed';
+
+                                if (e.code == 'weak-password') {
+                                  errorMessage =
+                                      'The password provided is too weak.';
+                                } else if (e.code == 'email-already-in-use') {
+                                  errorMessage =
+                                      'The account already exists for that email.';
+                                } else if (e.code == 'invalid-email') {
+                                  errorMessage =
+                                      'The email address is not valid.';
+                                }
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(errorMessage),
+                                    backgroundColor: Colors.red,
+                                  ),
                                 );
                               }
                             },

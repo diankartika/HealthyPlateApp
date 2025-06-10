@@ -12,7 +12,20 @@
           "package_name": "com.example.healthy_plate_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "621760606382-654nm8r9927l4qr5n5op5idu8lt05311.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.healthy_plate_app",
+            "certificate_hash": "9a016844cb4c2e6b35d3c8e4ec5ff56d68eb5a7c"
+          }
+        },
+        {
+          "client_id": "621760606382-i3umi80q0lic7giph4v0rhmpdd5s3om2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyALhhNK25Lq3OGKJnl9tEbkJhGHpn-lxGY"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621760606382-i3umi80q0lic7giph4v0rhmpdd5s3om2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "621760606382-egtj3b9fnnretohnrp5788guoa6gfgl8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.healthyPlateApp"
+              }
+            }
+          ]
         }
       }
     }
