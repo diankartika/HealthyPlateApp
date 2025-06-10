@@ -7,10 +7,23 @@ class ScrollableButtonGrid extends StatefulWidget {
 
 class _ScrollableButtonGridState extends State<ScrollableButtonGrid> {
   // Sample data with label and unique ID
-  final List<Map<String, dynamic>> buttonData = List.generate(
-    20,
-    (index) => {'id': index, 'label': 'Cihuuyyyyy ${index + 1}'},
-  );
+  final List<Map<String, dynamic>> buttonData = [
+    {'id': 0, 'label': 'Weight Loss'},
+    {'id': 1, 'label': 'Muscle Gain'},
+    {'id': 2, 'label': 'Maintenance'},
+    {'id': 3, 'label': 'Keto Diet'},
+    {'id': 4, 'label': 'Low Sugar'},
+    {'id': 5, 'label': 'High Protein'},
+    {'id': 6, 'label': 'Diabetic Friendly'},
+    {'id': 7, 'label': 'Gluten Free'},
+    {'id': 8, 'label': 'Intermittent Fasting'},
+    {'id': 9, 'label': 'Balanced Diet'},
+    {'id': 10, 'label': 'Heart Healthy'},
+    {'id': 11, 'label': 'Boost Immunity'},
+    {'id': 12, 'label': 'Low Fat'},
+    {'id': 13, 'label': 'Pescatarian'},
+    {'id': 14, 'label': 'Raw Food'},
+  ];
 
   // Track selected buttons by ID
   final Set<int> selectedButtons = {};
